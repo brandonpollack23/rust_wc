@@ -1,0 +1,25 @@
+name: rust_wc
+version: "0.1"
+author: Brandon Pollack
+about: My attempt to learn rust by making my own coreutil/wc
+args:
+  - bytes:
+      short: c
+      long: bytes
+      help: print the byte counts
+  - chars:
+      short: m
+      long: chars
+      help: print the character counts
+  - lines:
+      short: l
+      long: lines
+      help: print the newline counts
+  - max_length:
+      short: L
+      long: max-line-length
+      help: print the maximum display width
+  - words:
+      short: w
+      long: words
+      help: print the word counts
