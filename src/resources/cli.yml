@@ -23,3 +23,5 @@ args:
       short: w
       long: words
       help: print the word counts
+  - FILES:
+      multiple: true

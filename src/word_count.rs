@@ -7,6 +7,7 @@ use std::path::Path;
 use std::io::BufRead;
 use std::io::Read;
 
+#[derive(Debug)]
 pub struct Counts {
     bytes: usize,
     chars: usize,

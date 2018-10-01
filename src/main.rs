@@ -14,8 +14,13 @@ fn main() {
     let yaml = load_yaml!("resources/cli.yml");
     let matches = clap::App::from_yaml(yaml).get_matches();
 
-    let result = run_coreutil_wc("testfile").unwrap();
+    let files = matches.values_of("FILES").unwrap();
+
+    let results = files.map(run_coreutil_wc);
 
     let config = Config::new(&matches);
-    println!("{}", result.create_result_string(&config))
+
+    results.for_each(|result| -> () {
+        println!("{}", result.ok().unwrap().create_result_string(&config))
+    });
 }
