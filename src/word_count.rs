@@ -6,6 +6,7 @@ use std::io::ErrorKind;
 use std::path::Path;
 use std::io::BufRead;
 use std::io::Read;
+use std::fmt::Write;
 
 #[derive(Debug)]
 pub struct Counts {
@@ -28,19 +29,41 @@ impl Counts {
     }
 
     pub fn create_result_string(&self, config: &Config) -> String {
-        String::from("")
+        let mut output = String::from(" ");
+
+        if config.print_lines {
+            write!(&mut output, "{} ", self.lines);
+        }
+        if config.print_words {
+            write!(&mut output, "{} ", self.words);
+        }
+        if config.print_bytes {
+            write!(&mut output, "{} ", self.bytes);
+        }
+        if config.print_chars {
+            write!(&mut output, "{} ", self.chars);
+        }
+        if config.print_max_length {
+            write!(&mut output, "{} ", self.max_length);
+        }
+
+        // Remove extra space.
+        output.pop();
+
+        output
     }
 }
 
-// TODO make execute on vec
 pub fn run_coreutil_wc(path: &str) -> io::Result<Counts> {
-    let mut file_reader = open(path)?;
+    let file_reader = open(path)?;
 
-    let mut test_string = String::new();
-    file_reader.read_line(&mut test_string);
-    println!("file contents: {}", test_string);
+    let mut counts = Counts::zeros();
 
-    Ok(Counts::zeros())
+    for current_line in file_reader.lines() {
+        line_counts(&current_line.unwrap(), &mut counts);
+    }
+
+    Ok(counts)
 }
 
 fn open(path: &str) -> io::Result<BufReader<Box<Read>>> {
@@ -59,3 +82,13 @@ fn open(path: &str) -> io::Result<BufReader<Box<Read>>> {
     Ok(BufReader::new(Box::new(file)))
 }
 
+fn line_counts(line: &String, counts: &mut Counts) {
+    if line.len() > counts.max_length {
+        counts.max_length = line.len();
+    }
+
+    counts.chars += line.len();
+    counts.bytes += line.bytes().len();
+    counts.lines += 1;
+    counts.words += line.split_whitespace().count();
+}

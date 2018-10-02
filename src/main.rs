@@ -21,6 +21,6 @@ fn main() {
     let config = Config::new(&matches);
 
     results.for_each(|result| -> () {
-        println!("{}", result.ok().unwrap().create_result_string(&config))
+        println!("{}", result.unwrap().create_result_string(&config))
     });
 }

@@ -4,11 +4,11 @@ use clap::ArgMatches;
 
 #[derive(Debug)]
 pub struct Config {
-    print_bytes: bool,
-    print_chars: bool,
-    print_lines: bool,
-    print_words: bool,
-    print_max_length: bool,
+    pub print_bytes: bool,
+    pub print_chars: bool,
+    pub print_lines: bool,
+    pub print_words: bool,
+    pub print_max_length: bool,
 }
 
 impl Config {
